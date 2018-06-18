@@ -39,13 +39,14 @@ private extension CardView {
         self.contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         self.contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         
-        self.backgroundColor = UIColor.clear
-        self.layer.shadowRadius = 5
-        self.layer.shadowOffset = CGSize(width: 2, height: 2)
-        self.layer.shadowColor = UIColor.darkGray.cgColor
-        self.layer.shadowOpacity = 0.7
+//        self.backgroundColor = UIColor.clear
+//        self.layer.shadowRadius = 5
+//        self.layer.shadowOffset = CGSize(width: 2, height: 2)
+//        self.layer.shadowColor = UIColor.darkGray.cgColor
+//        self.layer.shadowOpacity = 0.7
         
-        self.contentView.layer.cornerRadius = 10
+//        self.contentView.layer.cornerRadius = 10
+        self.contentView.layer.cornerRadius = 30
         self.contentView.layer.masksToBounds = true
     }
 }
