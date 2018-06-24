@@ -18,6 +18,7 @@ class DetinationViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.imageView.image = self.image
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap)))
+        self.navigationItem.title = "Second"
     }
 
     override func didReceiveMemoryWarning() {

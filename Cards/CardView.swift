@@ -23,7 +23,9 @@ class CardView: UIView {
         self.commonInit()
     }
     
-    
+    func corners(_ corners: Bool) {
+        self.contentView.layer.cornerRadius = corners ? 30 : 0
+    }
 }
 
 private extension CardView {
@@ -46,7 +48,6 @@ private extension CardView {
 //        self.layer.shadowOpacity = 0.7
         
 //        self.contentView.layer.cornerRadius = 10
-        self.contentView.layer.cornerRadius = 30
         self.contentView.layer.masksToBounds = true
     }
 }

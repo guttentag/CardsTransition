@@ -18,6 +18,7 @@
 		01C3F9BB20D6A18500AA1F24 /* CardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C3F9BA20D6A18500AA1F24 /* CardCollectionViewCell.swift */; };
 		01C3F9BD20D7C15D00AA1F24 /* DetinationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C3F9BC20D7C15D00AA1F24 /* DetinationViewController.swift */; };
 		01C3F9BF20D7C23F00AA1F24 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C3F9BE20D7C23F00AA1F24 /* Animator.swift */; };
+		01C3F9C120D7F32200AA1F24 /* NavigationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C3F9C020D7F32200AA1F24 /* NavigationAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		01C3F9BA20D6A18500AA1F24 /* CardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionViewCell.swift; sourceTree = "<group>"; };
 		01C3F9BC20D7C15D00AA1F24 /* DetinationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetinationViewController.swift; sourceTree = "<group>"; };
 		01C3F9BE20D7C23F00AA1F24 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
+		01C3F9C020D7F32200AA1F24 /* NavigationAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 		01C3F99620D69A9300AA1F24 = {
 			isa = PBXGroup;
 			children = (
+				01C3F9C020D7F32200AA1F24 /* NavigationAnimator.swift */,
 				01C3F9A120D69A9300AA1F24 /* Cards */,
 				01C3F9A020D69A9300AA1F24 /* Products */,
 			);
@@ -160,6 +163,7 @@
 				01C3F9BD20D7C15D00AA1F24 /* DetinationViewController.swift in Sources */,
 				01C3F9BB20D6A18500AA1F24 /* CardCollectionViewCell.swift in Sources */,
 				01C3F9BF20D7C23F00AA1F24 /* Animator.swift in Sources */,
+				01C3F9C120D7F32200AA1F24 /* NavigationAnimator.swift in Sources */,
 				01C3F9A320D69A9300AA1F24 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
