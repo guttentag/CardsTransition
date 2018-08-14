@@ -14,59 +14,14 @@ class Animator: NSObject, UIViewControllerAnimatedTransitioning {
     var originFrame = CGRect.zero
     var cardData: CardData!
     var originView: UIView!
-//    var dismissCompletion: (()->())?
+    var dismissCompletion: (()->())?
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
         let toView = transitionContext.view(forKey: .to)!
         let fromView = transitionContext.view(forKey: .from)!
         
-//        let herbView = self.presenting ? toView : transitionContext.view(forKey: .from)!
-//        let herbView = self.presenting ? toView.subviews.first! : transitionContext.view(forKey: .from)!.subviews.first!
-//        let herbView = self.presenting ? toView.subviews.first! : UIImageView(frame: transitionContext.view(forKey: .from)!.subviews.first!.frame)
-//
-//        let initialFrame = self.presenting ? self.originFrame : herbView.frame
-//        let finalFrame = self.presenting ? herbView.frame : self.originFrame
-//        print("***\ninitisl \(initialFrame.debugDescription)\nfinal \(finalFrame.debugDescription)\n***\n\(herbView.isHidden)")
-//        let xScalarFactor = self.presenting ? initialFrame.width / finalFrame.width : finalFrame.width / initialFrame.width
-//        let yScalarFactor = self.presenting ? initialFrame.height / finalFrame.height : finalFrame.height / initialFrame.height
-//
-//        let scaleTransform = CGAffineTransform(scaleX: xScalarFactor, y: yScalarFactor)
-//
-//        if self.presenting {
-//            herbView.transform = scaleTransform
-//            herbView.center = CGPoint(x: initialFrame.midX, y: initialFrame.midY)
-//        } else {
-//            (herbView as! UIImageView).image = (transitionContext.view(forKey: .from)!.subviews.first! as! UIImageView).image
-//            (herbView as! UIImageView).contentMode = .scaleAspectFill
-//
-//            containerView.addSubview(herbView)
-//        }
-//        herbView.clipsToBounds = true
-//        herbView.layer.cornerRadius = self.presenting ? 30 : 0
-//
-//        containerView.addSubview(toView)
-//        containerView.bringSubview(toFront: herbView)
-//
-//        UIView.animate(withDuration: self.duration, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-//            herbView.transform = self.presenting ? CGAffineTransform.identity : scaleTransform
-//            herbView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
-//            herbView.layer.cornerRadius = self.presenting ? 0 : 30
-//        }) { (_) in
-//            if self.presenting == false {
-//                self.dismissCompletion?()
-//            }
-//            transitionContext.completeTransition(true)
-//        }
-        
-//        let image = #imageLiteral(resourceName: "image1") // TODO
-//        let animatedView = UIImageView(image: image)
-//        animatedView.translatesAutoresizingMaskIntoConstraints = false
-//        animatedView.contentMode = .scaleAspectFill
-//        animatedView.clipsToBounds = true
-
-//        let animatedContainer = UIView()
-//        animatedContainer.clipsToBounds = true
+        containerView.backgroundColor = UIColor.white
         
         let animatedView = CardView()
         animatedView.imageView.image = self.cardData.image
@@ -74,76 +29,94 @@ class Animator: NSObject, UIViewControllerAnimatedTransitioning {
         animatedView.corners(self.presenting)
         
         if self.presenting {
-            toView.alpha = 0
+            toView.isHidden = true
             self.originView.isHidden = true
         }
         
-        containerView.addSubview(toView)
+        let detailsView = self.presenting ? toView : fromView
+        let detailsContainer = UIView()
+        detailsContainer.clipsToBounds = true
+        detailsContainer.addSubview(detailsView)
+        detailsContainer.translatesAutoresizingMaskIntoConstraints = false
+        detailsView.translatesAutoresizingMaskIntoConstraints = false
+        detailsView.topAnchor.constraint(equalTo: detailsContainer.topAnchor).isActive = true
+        detailsView.centerXAnchor.constraint(equalTo: detailsContainer.centerXAnchor).isActive = true
+        
+        containerView.addSubview(detailsContainer)
+        detailsView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
+        detailsView.heightAnchor.constraint(equalTo: containerView.heightAnchor, constant: -20).isActive = true
+
+        if !self.presenting {
+            containerView.addSubview(toView)
+        }
+        containerView.addSubview(detailsContainer)
         containerView.addSubview(animatedView)
         containerView.bringSubview(toFront: animatedView)
         
         animatedView.heightAnchor.constraint(equalTo: animatedView.widthAnchor).isActive = true
-        let topAnc = animatedView.topAnchor.constraint(equalTo: toView.topAnchor, constant: self.presenting ? self.originFrame.minY : 20)
-        let leadingAnc = animatedView.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: self.presenting ? self.originFrame.minX : 0)
-        let trailingAnc = animatedView.trailingAnchor.constraint(equalTo: self.presenting ? toView.leadingAnchor : toView.trailingAnchor, constant: self.presenting ? self.originFrame.maxX : 0)
+        let cardTopAnc = animatedView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: self.presenting ? self.originFrame.minY : 20)
+        let cardLeadingAnc = animatedView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: self.presenting ? self.originFrame.minX : 0)
+        let cardTrailingAnc = animatedView.trailingAnchor.constraint(equalTo: self.presenting ? containerView.leadingAnchor : containerView.trailingAnchor, constant: self.presenting ? self.originFrame.maxX : 0)
+
+        let topAnc = detailsContainer.topAnchor.constraint(equalTo: animatedView.topAnchor)
+        let leadingAnc = detailsContainer.leadingAnchor.constraint(equalTo: animatedView.leadingAnchor)
+        let trailingAnc = detailsContainer.trailingAnchor.constraint(equalTo: animatedView.trailingAnchor)
+        let bottomAnc = detailsContainer.bottomAnchor.constraint(equalTo: animatedView.bottomAnchor)
         
         topAnc.isActive = true
         leadingAnc.isActive = true
         trailingAnc.isActive = true
+        bottomAnc.isActive = true
+        
+        cardTopAnc.isActive = true
+        cardLeadingAnc.isActive = true
+        cardTrailingAnc.isActive = true
         
         containerView.setNeedsLayout()
         containerView.layoutIfNeeded()
         
-        topAnc.isActive = false
-        leadingAnc.isActive = false
-        trailingAnc.isActive = false
         
-        animatedView.topAnchor.constraint(equalTo: toView.topAnchor, constant: self.presenting ? 20 : self.originFrame.minY).isActive = true
-        animatedView.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: self.presenting ? 0 : self.originFrame.minX).isActive = true
-        animatedView.trailingAnchor.constraint(equalTo: self.presenting ? toView.trailingAnchor : toView.leadingAnchor, constant: self.presenting ? 0 : self.originFrame.maxX).isActive = true
-
-        UIView.animateKeyframes(withDuration: self.duration, delay: 0, options: [.calculationModeLinear], animations: {
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5, animations: {
-                containerView.layoutIfNeeded()
-                animatedView.corners(!self.presenting)
-            })
+        UIView.animate(withDuration: self.duration / 2.0, animations: {
+            cardTopAnc.isActive = false
+            cardLeadingAnc.isActive = false
+            cardTrailingAnc.isActive = false
             
-            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5, animations: {
-                if self.presenting {
-                    
-                }
-            })
+            animatedView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: self.presenting ? 20 : self.originFrame.minY).isActive = true
+            animatedView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: self.presenting ? 0 : self.originFrame.minX).isActive = true
+            animatedView.trailingAnchor.constraint(equalTo: self.presenting ? containerView.trailingAnchor : containerView.leadingAnchor, constant: self.presenting ? 0 : self.originFrame.maxX).isActive = true
+            
+            containerView.layoutIfNeeded()
+            animatedView.corners(!self.presenting)
+            if !self.presenting {
+                detailsContainer.isHidden = true
+            }
         }) { (_) in
             if self.presenting {
-                animatedView.isHidden = true
+                UIView.animate(withDuration: self.duration / 4.0, animations: {
+                    topAnc.isActive = false
+                    leadingAnc.isActive = false
+                    trailingAnc.isActive = false
+                    bottomAnc.isActive = false
+                    
+                    detailsContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20).isActive = true
+                    detailsContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 0).isActive = true
+                    detailsContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 0).isActive = true
+                    detailsContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 0).isActive = true
+                    
+                    containerView.layoutIfNeeded()
+                    toView.isHidden = false
+                }, completion: { (_) in
+                    animatedView.isHidden = true
+                    transitionContext.completeTransition(true)
+                })
             } else {
                 self.originView.isHidden = false
-//                self.dismissCompletion?()
+                transitionContext.completeTransition(true)
             }
-            
-            toView.alpha = 1
-            transitionContext.completeTransition(true)
-            
         }
-//        UIView.animate(withDuration: self.duration, animations: {
-//            containerView.layoutIfNeeded()
-//            animatedView.corners(!self.presenting)
-//        }) { (_) in
-//            if self.presenting {
-//                animatedView.isHidden = true
-//            } else {
-//                self.originView.isHidden = false
-////                self.dismissCompletion?()
-//            }
-//
-//            toView.alpha = 1
-//            transitionContext.completeTransition(true)
-//        }
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return self.duration
     }
-    
-    
 }

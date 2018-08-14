@@ -41,49 +41,49 @@ class ViewController: UIViewController {
         self.data.append(CardData("Title 4", image: #imageLiteral(resourceName: "image4")))
     }
 
-    func requests() {
-        let urlString1 = "https://api.reali.com/offers/getPlaceOfferScreenData"
-        let url = URL(string: urlString1)!
-        
-        let dataDictionary = [
-            "authToken": "57c67192-724f-4596-bca4-b416bff1de31",
-            "listingId": "22d2df96-a4a9-48af-8604-5f20f33f5f50"
-        ]
-        
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try! JSONSerialization.data(withJSONObject: dataDictionary, options: [])
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let dispatchGroup = DispatchGroup()
-        for i in 1...10 {
-            dispatchGroup.enter()
-            Timer.scheduledTimer(withTimeInterval: Double(i * 3), repeats: false) { (_) in
-                
-                //            URLSession(configuration: URLSessionConfiguration.default).dataTask(with: request) { (data, response, error) in
-                URLSession.shared.dataTask(with: request) { (data, response, error) in
-                    
-                    if let data = data, let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String,AnyObject> {
-                        if let errorObject = dictionary!["errorObject"] {
-                            print("\(i)\t: status \((response as! HTTPURLResponse).statusCode)\t error \(errorObject.debugDescription)")
-                        } else {
-                            print("\(i)\t: status \((response as! HTTPURLResponse).statusCode)")
-                        }
-                    } else {
-                        print("\(i)\t: status \((response as? HTTPURLResponse)?.statusCode ?? -1)\t \(error?.localizedDescription ?? "nil")")
-                    }
-                    dispatchGroup.leave()
-                    }.resume()
-            }
-        }
-        
-        dispatchGroup.notify(queue: DispatchQueue.global(qos: .background)) {
-            DispatchQueue.main.async {
-                print("All Ended")
-            }
-        }
-    }
+//    func requests() {
+//        let urlString1 = "https://api.reali.com/offers/getPlaceOfferScreenData"
+//        let url = URL(string: urlString1)!
+//
+//        let dataDictionary = [
+//            "authToken": "57c67192-724f-4596-bca4-b416bff1de31",
+//            "listingId": "22d2df96-a4a9-48af-8604-5f20f33f5f50"
+//        ]
+//
+//
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.httpBody = try! JSONSerialization.data(withJSONObject: dataDictionary, options: [])
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        let dispatchGroup = DispatchGroup()
+//        for i in 1...10 {
+//            dispatchGroup.enter()
+//            Timer.scheduledTimer(withTimeInterval: Double(i * 3), repeats: false) { (_) in
+//
+//                //            URLSession(configuration: URLSessionConfiguration.default).dataTask(with: request) { (data, response, error) in
+//                URLSession.shared.dataTask(with: request) { (data, response, error) in
+//
+//                    if let data = data, let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String,AnyObject> {
+//                        if let errorObject = dictionary!["errorObject"] {
+//                            print("\(i)\t: status \((response as! HTTPURLResponse).statusCode)\t error \(errorObject.debugDescription)")
+//                        } else {
+//                            print("\(i)\t: status \((response as! HTTPURLResponse).statusCode)")
+//                        }
+//                    } else {
+//                        print("\(i)\t: status \((response as? HTTPURLResponse)?.statusCode ?? -1)\t \(error?.localizedDescription ?? "nil")")
+//                    }
+//                    dispatchGroup.leave()
+//                    }.resume()
+//            }
+//        }
+//
+//        dispatchGroup.notify(queue: DispatchQueue.global(qos: .background)) {
+//            DispatchQueue.main.async {
+//                print("All Ended")
+//            }
+//        }
+//    }
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -111,9 +111,9 @@ extension ViewController: UIViewControllerTransitioningDelegate {
             self.transition.originFrame = cardView.convert(cardView.bounds, to: self.view)
         }
         transition.presenting = true
-//        self.transition.dismissCompletion = {
-//            self.selectedCardView?.isHidden = false
-//        }
+        self.transition.dismissCompletion = {
+            self.selectedCardView?.isHidden = false
+        }
         self.transition.originView = selectedCardView
         return self.transition
     }
@@ -140,7 +140,6 @@ extension ViewController: UICollectionViewDelegate {
             self.present(vc, animated: true, completion: nil)
 //            self.navigationController?.pushViewController(vc, animated: true)
         }
-//        self.requests()
     }
 }
 
@@ -152,4 +151,3 @@ extension ViewController: UINavigationControllerDelegate {
         return self.navigationAnimator
     }
 }
-
